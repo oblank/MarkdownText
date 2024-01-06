@@ -1,5 +1,6 @@
 import SwiftUI
 import Markdown
+import Foundation
 
 struct MarkdownTextBuilder: MarkupWalker {
     var isNested: Bool = false
@@ -17,12 +18,33 @@ struct MarkdownTextBuilder: MarkupWalker {
         blockElements.append(.heading(.init(level: markdown.level, content: .init(elements: inlineElements))))
         inlineElements = []
     }
+    
+    private func isMoneyMarkdown(_ text: String) -> Bool {
+        do {
+            let FEE_PREFIX_REGEX = "^[$￥¥€£؋₩₱₾Т៛С̲৳₮ரூ₫₤₽₴Kƒ₲₦₵฿ΞŁÐ]*\\. "
+            let regex = try NSRegularExpression(pattern: FEE_PREFIX_REGEX)
+            let results = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
+            if !results.isEmpty {
+                return true
+            }
+        } catch let error {
+            print("invalid regex: \(error.localizedDescription)")
+        }
+        return false
+    }
 
     mutating func visitText(_ markdown: Markdown.Text) {
         var attributes: InlineAttributes = []
         var parent = markdown.parent
         var text = markdown.string
-
+        
+        // 增加记账格式 text
+        if isMoneyMarkdown(text) {
+            attributes.insert(.money)
+            blockElements.append(.list(.init(list: .init(type: .unordered, elements: [.unordered(.init(level: 0, bullet: .init(level: 0), content: .init(content: .init(elements: [.init(content: .init(text), attributes: attributes)]))))]), level: 0)))
+            return
+        }
+        
         while parent != nil {
             defer { parent = parent?.parent }
 

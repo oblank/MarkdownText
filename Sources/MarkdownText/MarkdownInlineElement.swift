@@ -25,6 +25,8 @@ public struct InlineAttributes: OptionSet, CustomStringConvertible {
     public static let code = InlineAttributes(rawValue: 1 << 3)
     /// A link representation should be applied
     public static let link = InlineAttributes(rawValue: 1 << 4)
+    /// money record
+    public static let money = InlineAttributes(rawValue: 1 << 5)
 
     public var description: String {
         var elements: [String] = []
@@ -32,6 +34,7 @@ public struct InlineAttributes: OptionSet, CustomStringConvertible {
         if contains(.italic) { elements.append("italic") }
         if contains(.strikethrough) { elements.append("strikethrough") }
         if contains(.code) { elements.append("code") }
+        if contains(.money) { elements.append("money") }
         return elements.joined(separator: ", ")
     }
 }
@@ -42,6 +45,7 @@ internal extension Text {
         emphasis: EmphasisMarkdownStyle,
         strikethrough: StrikethroughMarkdownStyle,
         link: InlineLinkMarkdownStyle,
+        money: MoneyMarkdownStyle,
         attributes: InlineAttributes
     ) -> Self {
         var text = self
@@ -62,6 +66,10 @@ internal extension Text {
             text = link.makeBody(configuration: .init(content: text))
         }
 
+        if attributes.contains(.money) {
+            text = money.makeBody(configuration: .init(content: text))
+        }
+        
         return text
     }
 }

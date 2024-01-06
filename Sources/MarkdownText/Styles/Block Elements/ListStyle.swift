@@ -28,6 +28,7 @@ public struct ListStyleMarkdownConfiguration {
         @Environment(\.markdownUnorderedListItemStyle) private var unordered
         @Environment(\.markdownOrderedListItemStyle) private var ordered
         @Environment(\.markdownCheckListItemStyle) private var checklist
+        @Environment(\.markdownMoneyListItemStyle) private var moneyist
 
         @Environment(\.markdownCheckListItemVisibility) private var checkListItemVisibility
         @Environment(\.markdownUnorderedListItemVisibility) private var unorderedListItemVisibility
@@ -56,6 +57,8 @@ public struct ListStyleMarkdownConfiguration {
                         }
                     case let .list(nested):
                         AnyView(list.makeBody(configuration: .init(list: nested, level: level + 1)))
+                    case .moneyList(config):
+                        AnyView(moneyist.makeBody(configuration: config))
                     }
                 }
             }

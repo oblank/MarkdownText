@@ -8,6 +8,7 @@ public struct InlineMarkdownConfiguration {
         @Environment(\.markdownStrikethroughStyle) private var strikethrough
         @Environment(\.markdownInlineCodeStyle) private var code
         @Environment(\.markdownInlineLinkStyle) private var link
+        @Environment(\.markdownMoneyStyle) private var money
 
         let elements: [MarkdownInlineElement]
 
@@ -22,7 +23,8 @@ public struct InlineMarkdownConfiguration {
                         strong: strong,
                         emphasis: emphasis,
                         strikethrough: strikethrough,
-                        link: link,
+                        link: link, 
+                        money: money,
                         attributes: component.attributes
                     )
                 }

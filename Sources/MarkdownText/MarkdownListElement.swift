@@ -8,6 +8,8 @@ public struct MarkdownList {
         case unordered
         /// An ordered list
         case ordered
+        /// An money list
+        case money
     }
 
     /// The type of list this represents
@@ -27,6 +29,10 @@ public struct MarkdownList {
         elements.append(.checklist(item))
     }
 
+    internal mutating func append(checklist item: MoneyListItemMarkdownConfiguration) {
+        elements.append(.moneyList(item))
+    }
+    
     internal mutating func append(nested list: Self) {
         elements.append(.list(list))
     }
@@ -42,4 +48,5 @@ public enum MarkdownListElement {
     case unordered(UnorderedListItemMarkdownConfiguration)
     /// A checked list
     case checklist(CheckListItemMarkdownConfiguration)
+    case moneyList(MoneyListItemMarkdownConfiguration)
 }
