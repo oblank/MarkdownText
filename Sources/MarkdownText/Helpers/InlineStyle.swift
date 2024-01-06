@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct InlineMarkdownConfiguration {
+public struct InlineMarkdownConfiguration {
     struct Label: View {
         @Environment(\.font) private var font
         @Environment(\.markdownStrongStyle) private var strong
