@@ -25,13 +25,14 @@ public struct AnyMoneyListItemMarkdownStyle: MoneyListItemMarkdownStyle {
 public struct MoneyListItemMarkdownConfiguration {
     private struct Item: View {
         @ScaledMetric private var reservedWidth: CGFloat = 25
-        @Environment(\.markdownParagraphStyle) private var paragraphStyle
+        @Environment(\.markdownMoneyStyle) private var moneyStyle
 //        @Environment(\.markdownMoneyListBulletStyle) private var bulletStyle
 //        @Environment(\.markdownMoneyListItemBulletVisibility) private var bulletVisibility
 
         public let level: Int
 //        public let bullet: MoneyListBulletMarkdownConfiguration
-        public let paragraph: ParagraphMarkdownConfiguration
+//        public let paragraph: ParagraphMarkdownConfiguration
+        public let moneyConfig: MoneyMarkdownConfiguration
 
         private var space: String {
             Array(repeating: "    ", count: level).joined()
@@ -39,10 +40,7 @@ public struct MoneyListItemMarkdownConfiguration {
 
         var body: some View {
             HStack(alignment: .firstTextBaseline, spacing: 0) {
-                paragraphStyle.makeBody(configuration: paragraph)
-                
-//                Text(space)
-//
+                moneyStyle.makeBody(configuration: moneyConfig)
 //                Label {
 //                    paragraphStyle.makeBody(configuration: paragraph)
 //                } icon: {
@@ -61,11 +59,11 @@ public struct MoneyListItemMarkdownConfiguration {
     /// The bullet configuration for this element
 //    public let bullet: MoneyListBulletMarkdownConfiguration
     /// The content configuration for this element
-    public let content: ParagraphMarkdownConfiguration
+    public let content: MoneyMarkdownConfiguration
     /// Returns a default unordered item markdown representation
     public var label: some View {
 //        Item(level: level, bullet: bullet, paragraph: content)
-        Item(level: level, paragraph: content)
+        Item(level: level, moneyConfig: content)
     }
 }
 

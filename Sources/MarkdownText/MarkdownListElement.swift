@@ -29,8 +29,8 @@ public struct MarkdownList {
         elements.append(.checklist(item))
     }
 
-    internal mutating func append(checklist item: MoneyListItemMarkdownConfiguration) {
-        elements.append(.moneyList(item))
+    internal mutating func append(moneylist item: MoneyListItemMarkdownConfiguration) {
+        elements.append(.moneyItem(item))
     }
     
     internal mutating func append(nested list: Self) {
@@ -48,5 +48,5 @@ public enum MarkdownListElement {
     case unordered(UnorderedListItemMarkdownConfiguration)
     /// A checked list
     case checklist(CheckListItemMarkdownConfiguration)
-    case moneyList(MoneyListItemMarkdownConfiguration)
+    case moneyItem(MoneyListItemMarkdownConfiguration)
 }

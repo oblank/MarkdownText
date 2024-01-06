@@ -40,7 +40,9 @@ public struct ListStyleMarkdownConfiguration {
         let level: Int
 
         var body: some View {
-            VStack(alignment: .leading, spacing: spacing) {
+            print("markdownList", markdownList)
+//            let spacing = markdownList.elements.first. ? 2 : spacing
+            return VStack(alignment: .leading, spacing: spacing) {
                 ForEach(markdownList.elements.indices, id: \.self) { index in
                     switch markdownList.elements[index] {
                     case let .ordered(config):
@@ -57,7 +59,7 @@ public struct ListStyleMarkdownConfiguration {
                         }
                     case let .list(nested):
                         AnyView(list.makeBody(configuration: .init(list: nested, level: level + 1)))
-                    case .moneyList(config):
+                    case let .moneyItem(config):
                         AnyView(moneyist.makeBody(configuration: config))
                     }
                 }

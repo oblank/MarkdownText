@@ -6,6 +6,7 @@ enum MarkdownBlockElement {
     case paragraph(ParagraphMarkdownConfiguration)
     case quote(QuoteMarkdownConfiguration)
     case list(ListStyleMarkdownConfiguration)
+    case moneylist(ListStyleMarkdownConfiguration)
     case code(CodeMarkdownConfiguration)
     case image(ImageMarkdownConfiguration)
     case thematicBreak(ThematicMarkdownConfiguration)

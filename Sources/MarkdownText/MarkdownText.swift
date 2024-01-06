@@ -94,6 +94,8 @@ private struct MarkdownContent: View {
                 AnyView(paragraphStyle.makeBody(configuration: config))
             case let .inline(config):
                 AnyView(inlineStyle.makeBody(configuration: config))
+            case let .moneylist(config):
+                AnyView(listStyle.makeBody(configuration: config))
             }
         }
     }

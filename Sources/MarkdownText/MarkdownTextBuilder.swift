@@ -8,6 +8,8 @@ struct MarkdownTextBuilder: MarkupWalker {
     var inlineElements: [MarkdownInlineElement] = []
     var blockElements: [MarkdownBlockElement] = []
     var lists: [MarkdownList] = []
+    private var moneyList: MarkdownList? = nil
+    private var lastIsMoneyItem: Bool = false
 
     init(document: Document) {
         visit(document)
@@ -37,14 +39,7 @@ struct MarkdownTextBuilder: MarkupWalker {
         var attributes: InlineAttributes = []
         var parent = markdown.parent
         var text = markdown.string
-        
-        // 增加记账格式 text
-        if isMoneyMarkdown(text) {
-            attributes.insert(.money)
-            blockElements.append(.list(.init(list: .init(type: .unordered, elements: [.unordered(.init(level: 0, bullet: .init(level: 0), content: .init(content: .init(elements: [.init(content: .init(text), attributes: attributes)]))))]), level: 0)))
-            return
-        }
-        
+    
         while parent != nil {
             defer { parent = parent?.parent }
 
@@ -73,6 +68,28 @@ struct MarkdownTextBuilder: MarkupWalker {
             }
         }
 
+        // ------------------增加记账格式 text start--------------------------
+        if isMoneyMarkdown(text) {
+            attributes.insert(.money)
+//            if inlineElements.count > 0 && !lastIsMoneyItem {
+//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
+//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
+//            }
+//            inlineElements.append(.init(content: .init(text), attributes: attributes))
+//            inlineElements.append(.init(content: .init("\n"), attributes: attributes))
+            
+            text = "\(inlineElements.count > 0 && !lastIsMoneyItem ? "\n\n" : "")\(text)\n"
+            lastIsMoneyItem = true
+//            return
+        } else {
+            if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && lastIsMoneyItem {
+//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
+                text = "\n\(text)"
+                lastIsMoneyItem = false
+            }
+        }
+        // ------------------增加记账格式 text end--------------------------
+        
         inlineElements.append(.init(content: .init(text), attributes: attributes))
     }
 
@@ -118,7 +135,7 @@ struct MarkdownTextBuilder: MarkupWalker {
 
     mutating func visitParagraph(_ markdown: Paragraph) {
         descendInto(markdown)
-
+        
         if let listItem = markdown.parent as? ListItem {
             let index = lists.index(before: lists.endIndex)
 
