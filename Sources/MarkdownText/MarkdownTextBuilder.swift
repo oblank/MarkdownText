@@ -69,22 +69,17 @@ struct MarkdownTextBuilder: MarkupWalker {
         }
 
         // ------------------增加记账格式 text start--------------------------
+        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            // 这会导致行前面有空格
+            return
+        }
         if isMoneyMarkdown(text) {
             attributes.insert(.money)
-//            if inlineElements.count > 0 && !lastIsMoneyItem {
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-//            }
-//            inlineElements.append(.init(content: .init(text), attributes: attributes))
-//            inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-            
-            text = "\(inlineElements.count > 0 && !lastIsMoneyItem ? "\n\n" : "")\(text)\n"
+            text = "\(inlineElements.count > 0 && !lastIsMoneyItem ? "\n" : "\n")\(text)"
             lastIsMoneyItem = true
-//            return
         } else {
             if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && lastIsMoneyItem {
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-                text = "\n\(text)"
+                text = "\(text)"
                 lastIsMoneyItem = false
             }
         }

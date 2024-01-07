@@ -64,38 +64,43 @@ private struct MarkdownContent: View {
     private var inlineStyle = InlineMarkdownStyle()
 
     private var content: some View {
-        ForEach(elements.indices, id: \.self) { index in
-            switch elements[index] {
-            case let .heading(config):
-                if headingVisibility != .hidden {
-                    AnyView(headerStyle.makeBody(configuration: config))
-                }
-            case let .quote(config):
-                if quoteVisibility != .hidden {
-                    AnyView(quoteStyle.makeBody(configuration: config))
-                }
-            case let .code(config):
-                if codeVisibility != .hidden {
-                    AnyView(codeStyle.makeBody(configuration: config))
-                }
-            case let .thematicBreak(config):
-                if thematicBreakVisibility != .hidden {
-                    AnyView(thematicBreak.makeBody(configuration: config))
-                }
-            case let .image(config):
-                if imageVisibility != .hidden {
-                    AnyView(imageStyle.makeBody(configuration: config))
-                }
-            case let .list(config):
-                if listVisibility != .hidden {
+//        print("elements.indices", elements)
+//        return EmptyView()
+        
+        return Group {
+            ForEach(elements.indices, id: \.self) { index in
+                switch elements[index] {
+                case let .heading(config):
+                    if headingVisibility != .hidden {
+                        AnyView(headerStyle.makeBody(configuration: config))
+                    }
+                case let .quote(config):
+                    if quoteVisibility != .hidden {
+                        AnyView(quoteStyle.makeBody(configuration: config))
+                    }
+                case let .code(config):
+                    if codeVisibility != .hidden {
+                        AnyView(codeStyle.makeBody(configuration: config))
+                    }
+                case let .thematicBreak(config):
+                    if thematicBreakVisibility != .hidden {
+                        AnyView(thematicBreak.makeBody(configuration: config))
+                    }
+                case let .image(config):
+                    if imageVisibility != .hidden {
+                        AnyView(imageStyle.makeBody(configuration: config))
+                    }
+                case let .list(config):
+                    if listVisibility != .hidden {
+                        AnyView(listStyle.makeBody(configuration: config))
+                    }
+                case let .paragraph(config):
+                    AnyView(paragraphStyle.makeBody(configuration: config))
+                case let .inline(config):
+                    AnyView(inlineStyle.makeBody(configuration: config))
+                case let .moneylist(config):
                     AnyView(listStyle.makeBody(configuration: config))
                 }
-            case let .paragraph(config):
-                AnyView(paragraphStyle.makeBody(configuration: config))
-            case let .inline(config):
-                AnyView(inlineStyle.makeBody(configuration: config))
-            case let .moneylist(config):
-                AnyView(listStyle.makeBody(configuration: config))
             }
         }
     }
