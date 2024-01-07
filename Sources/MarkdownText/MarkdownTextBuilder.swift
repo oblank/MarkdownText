@@ -69,23 +69,32 @@ struct MarkdownTextBuilder: MarkupWalker {
         }
 
         // ------------------增加记账格式 text start--------------------------
+//        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && lastIsMoneyItem {
+//            return
+//        }
         if isMoneyMarkdown(text) {
             attributes.insert(.money)
-//            if inlineElements.count > 0 && !lastIsMoneyItem {
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-//            }
-//            inlineElements.append(.init(content: .init(text), attributes: attributes))
-//            inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-            
-            text = "\(inlineElements.count > 0 && !lastIsMoneyItem ? "\n\n" : "")\(text)\n"
+            if moneyList == nil {
+                moneyList = .init(type: .money, elements: [])
+            }
+            moneyList?.append(moneylist: .init(level: 0, content: .init(content: Text("\(text)"))))
             lastIsMoneyItem = true
-//            return
+            return
         } else {
             if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && lastIsMoneyItem {
-//                inlineElements.append(.init(content: .init("\n"), attributes: attributes))
-                text = "\n\(text)"
+                if let moneyList = moneyList {
+                    print("::text 00 => APPEND Block", moneyList.elements.count)
+                    blockElements.append(.moneylist(.init(list: moneyList, level: 0)))
+                }
                 lastIsMoneyItem = false
+                moneyList = nil
+                visitText(markdown)
+//                blockElements.append(.paragraph(.init(content: .init(elements: [.init(content: .init(text), attributes: attributes)]))))
+                print("::text 01 =>", text)
+                return
+            } else {
+//                inlineElements.append(.init(content: .init(text), attributes: attributes))
+                print("::text 02 =>", text)
             }
         }
         // ------------------增加记账格式 text end--------------------------

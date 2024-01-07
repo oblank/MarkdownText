@@ -64,6 +64,8 @@ private struct MarkdownContent: View {
     private var inlineStyle = InlineMarkdownStyle()
 
     private var content: some View {
+//        print("==>", elements.indices.count, elements)
+//        return EmptyView()
         ForEach(elements.indices, id: \.self) { index in
             switch elements[index] {
             case let .heading(config):
