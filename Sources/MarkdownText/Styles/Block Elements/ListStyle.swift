@@ -40,7 +40,7 @@ public struct ListStyleMarkdownConfiguration {
         let level: Int
 
         var body: some View {
-            print("markdownList", markdownList)
+//            print("markdownList", markdownList)
 //            let spacing = markdownList.elements.first. ? 2 : spacing
             return VStack(alignment: .leading, spacing: spacing) {
                 ForEach(markdownList.elements.indices, id: \.self) { index in
