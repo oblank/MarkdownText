@@ -23,7 +23,8 @@ struct MarkdownTextBuilder: MarkupWalker {
     
     private func isMoneyMarkdown(_ text: String) -> Bool {
         do {
-            let FEE_PREFIX_REGEX = "^[$￥¥€£؋₩₱₾Т៛С̲৳₮ரூ₫₤₽₴Kƒ₲₦₵฿ΞŁÐ]*\\. "
+//            let FEE_PREFIX_REGEX = "^[$￥¥€£؋₩₱₾Т៛С̲৳₮ரூ₫₤₽₴Kƒ₲₦₵฿ΞŁÐ]*\\. "
+            let FEE_PREFIX_REGEX = "[$￥¥€£؋₩₱₾Т៛С̲৳₮ரூ₫₤₽₴Kƒ₲₦₵฿ΞŁÐ]{1}[-0-9.]{1,}"
             let regex = try NSRegularExpression(pattern: FEE_PREFIX_REGEX)
             let results = regex.matches(in: text, range: NSRange(text.startIndex..., in: text))
             if !results.isEmpty {
@@ -34,6 +35,45 @@ struct MarkdownTextBuilder: MarkupWalker {
         }
         return false
     }
+    
+    enum TextType {
+        case FEE
+        case String
+    }
+    
+    struct Split {
+        var text: String
+        var type: TextType
+    }
+    
+    public func extractText(for pattern: String, in inputString: String) -> [Split] {
+        do {
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+            let matches = regex.matches(in: inputString, options: [], range: NSRange(location: 0, length: inputString.utf16.count))
+            var startIndex = inputString.startIndex
+
+            var ret: [Split] = []
+            for match in matches {
+                let range = Range(match.range, in: inputString)!
+                let substring = inputString[startIndex..<range.lowerBound]
+                let matchedPattern = String(inputString[range])
+                startIndex = range.upperBound
+                ret.append(Split(text: String(substring), type: .String))
+                ret.append(Split(text: String(matchedPattern), type: .FEE))
+            }
+
+            // 处理最后一个匹配之后的部分
+            if startIndex < inputString.endIndex {
+                let substring = inputString[startIndex..<inputString.endIndex]
+                ret.append(Split(text: String(substring), type: .String))
+            }
+            return ret
+        } catch {
+            print("Error with regular expression: \(error)")
+            return [Split(text: inputString, type: .String)]
+        }
+    }
+
 
     mutating func visitText(_ markdown: Markdown.Text) {
         var attributes: InlineAttributes = []
@@ -69,23 +109,26 @@ struct MarkdownTextBuilder: MarkupWalker {
         }
 
         // ------------------增加记账格式 text start--------------------------
-        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            // 这会导致行前面有空格
-            return
-        }
-        if isMoneyMarkdown(text) {
-            attributes.insert(.money)
-            text = "\(inlineElements.count > 0 && !lastIsMoneyItem ? "\n" : "\n")\(text)"
-            lastIsMoneyItem = true
+        let FEE_PREFIX_REGEX = "[$￥¥€£؋₩₱₾Т៛С̲৳₮ரூ₫₤₽₴Kƒ₲₦₵฿ΞŁÐ]{1}[-0-9.]{1,}"
+        let items = extractText(for: FEE_PREFIX_REGEX, in: text)
+        if items.isEmpty {
+            inlineElements.append(.init(content: .init(text), attributes: attributes))
         } else {
-            if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && lastIsMoneyItem {
-                text = "\(text)"
-                lastIsMoneyItem = false
+            items.forEach { item in
+                if item.type == .FEE {
+                    attributes.insert(.bold)
+                    attributes.insert(.money)
+                    inlineElements.append(.init(content: .init(" \(item.text) "), attributes: attributes))
+                    attributes.remove(.bold)
+                    attributes.remove(.money)
+                } else {
+                    inlineElements.append(.init(content: .init(item.text), attributes: attributes))
+                }
             }
         }
         // ------------------增加记账格式 text end--------------------------
         
-        inlineElements.append(.init(content: .init(text), attributes: attributes))
+        
     }
 
     mutating func visitOrderedList(_ markdown: OrderedList) {
