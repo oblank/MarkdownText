@@ -37,7 +37,7 @@ public struct InlineMarkdownConfiguration {
                     } else if component.attributes.contains(.money) {
                         var attributedString = AttributedString("\(component.content)")
                         var container = AttributeContainer()
-                        container.font = .body
+//                        container.font = .body
 //                        container.backgroundColor = .systemFill
                         
                         if let tmp = matches(for: "[-]?[0-9]+[.]?[0-9]*", in: component.content).first {
