@@ -8,10 +8,13 @@ struct MarkdownTextBuilder: MarkupWalker {
     var inlineElements: [MarkdownInlineElement] = []
     var blockElements: [MarkdownBlockElement] = []
     var lists: [MarkdownList] = []
+    var indent: Int = 0
     private var moneyList: MarkdownList? = nil
     private var lastIsMoneyItem: Bool = false
 
-    init(document: Document) {
+    // indent 缩进字符数
+    init(document: Document, indent: Int = 0) {
+        self.indent = indent
         visit(document)
     }
 
@@ -163,6 +166,10 @@ struct MarkdownTextBuilder: MarkupWalker {
             if isNested {
                 nestedBlockElements.append(.paragraph(.init(content: .init(elements: inlineElements))))
             } else {
+                // TODO 判断是否启用了自动缩进
+                if self.indent > 0 {
+                    inlineElements.insert(.init(content: .init(Array(repeating: "&ensp;", count: indent).joined()), attributes: [.indent]), at: 0)
+                }
                 blockElements.append(.paragraph(.init(content: .init(elements: inlineElements))))
             }
         }

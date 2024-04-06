@@ -15,9 +15,10 @@ public struct LazyMarkdownText: View, MarkupWalker {
     ///   - markdown: The markdown text to render
     ///   - source: An explicit source URL from which the input string came for marking source locations. This need not be a file URL.
     ///   - paragraphSpacing: The spacing to apply between all block elements
-    public init(_ markdown: String, source: URL? = nil, paragraphSpacing: CGFloat? = 20) {
+    public init(_ markdown: String, source: URL? = nil, paragraphSpacing: CGFloat? = 20, indent: Int = 0) {
         let elements = MarkdownTextBuilder(
-            document: Document(parsing: markdown, source: source)
+            document: Document(parsing: markdown, source: source),
+            indent: indent
         ).blockElements
 
         content = .init(elements: elements, paragraphSpacing: paragraphSpacing, isLazy: true)
@@ -34,9 +35,10 @@ public struct MarkdownText: View, MarkupWalker {
     ///   - markdown: The markdown text to render
     ///   - source: An explicit source URL from which the input string came for marking source locations. This need not be a file URL.
     ///   - paragraphSpacing: The spacing to apply between all block elements
-    public init(_ markdown: String, source: URL? = nil, paragraphSpacing: CGFloat? = 20) {
+    public init(_ markdown: String, source: URL? = nil, paragraphSpacing: CGFloat? = 20, indent: Int = 0) {
         let elements = MarkdownTextBuilder(
-            document: Document(parsing: markdown, source: source)
+            document: Document(parsing: markdown, source: source),
+            indent: indent
         ).blockElements
 
         content = .init(elements: elements, paragraphSpacing: paragraphSpacing, isLazy: false)
