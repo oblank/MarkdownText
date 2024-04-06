@@ -35,6 +35,7 @@ public struct InlineMarkdownConfiguration {
                             configuration: .init(code: component.content, font: font)
                         )
                     } else if component.attributes.contains(.money) {
+                        // 自定义金钱相关
                         var attributedString = AttributedString("\(component.content)")
                         var container = AttributeContainer()
 //                        container.font = .body
@@ -65,6 +66,9 @@ public struct InlineMarkdownConfiguration {
                             money: money,
                             attributes: component.attributes
                         )
+                    } else if component.attributes.contains(.indent) {
+                        // 自定义首页缩进，参考 https://cloud.tencent.com/developer/article/1616968
+                        result = result + Text(.init(component.content))
                     } else {
                         result = result + Text(component.content).apply(
                             strong: strong,

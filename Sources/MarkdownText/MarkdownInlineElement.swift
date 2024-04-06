@@ -27,6 +27,8 @@ public struct InlineAttributes: OptionSet, CustomStringConvertible {
     public static let link = InlineAttributes(rawValue: 1 << 4)
     /// money record
     public static let money = InlineAttributes(rawValue: 1 << 5)
+    /// indent
+    public static let indent = InlineAttributes(rawValue: 1 << 6)
 
     public var description: String {
         var elements: [String] = []
