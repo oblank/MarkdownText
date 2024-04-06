@@ -18,6 +18,9 @@ public struct InlineMarkdownConfiguration {
                     return result = result + code.makeBody(
                         configuration: .init(code: component.content, font: font)
                     )
+                } else if component.attributes.contains(.indent) {
+                    // 自定义首页缩进，参考 https://cloud.tencent.com/developer/article/1616968
+                    result = result + Text(.init(component.content))
                 } else {
                     return result = result + Text(component.content).apply(
                         strong: strong,
