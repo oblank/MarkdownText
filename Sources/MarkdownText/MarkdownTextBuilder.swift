@@ -166,9 +166,9 @@ struct MarkdownTextBuilder: MarkupWalker {
             if isNested {
                 nestedBlockElements.append(.paragraph(.init(content: .init(elements: inlineElements))))
             } else {
-                // TODO 判断是否启用了自动缩进
+                // 判断是否启用了自动缩进
                 if self.indent > 0 {
-                    inlineElements.insert(.init(content: .init(Array(repeating: "&ensp;", count: indent).joined()), attributes: [.indent]), at: 0)
+                    inlineElements.insert(.init(content: .init("&ensp;&ensp;"), attributes: [.indent]), at: 0)
                 }
                 blockElements.append(.paragraph(.init(content: .init(elements: inlineElements))))
             }
