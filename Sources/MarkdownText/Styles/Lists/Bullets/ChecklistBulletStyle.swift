@@ -35,7 +35,6 @@ public struct CheckListBulletMarkdownConfiguration {
                         .opacity(0.5)
                 } else {
                     Image(systemName: isChecked ? "checkmark.square" : "square")
-                        .font(.system(size: 17))
                 }
             }
                 .frame(minWidth: reservedWidth)
