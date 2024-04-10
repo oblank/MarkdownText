@@ -42,6 +42,7 @@ struct MarkdownTextBuilder: MarkupWalker {
         var attributes: InlineAttributes = []
         var parent = markdown.parent
         var text = markdown.string
+        var exts: [String: Any] = [:]
     
         while parent != nil {
             defer { parent = parent?.parent }
@@ -68,6 +69,9 @@ struct MarkdownTextBuilder: MarkupWalker {
                  */
                 attributes.insert(.link)
                 text = link.plainText // + (link.destination.flatMap { " [\($0)]" } ?? "")
+                if let url = link.destination {
+                    exts["url"] = url
+                }
             }
         }
 
@@ -88,7 +92,7 @@ struct MarkdownTextBuilder: MarkupWalker {
         }
         // ------------------增加记账格式 text end--------------------------
         
-        inlineElements.append(.init(content: .init(text), attributes: attributes))
+        inlineElements.append(.init(content: .init(text), attributes: attributes, exts: exts))
     }
 
     mutating func visitOrderedList(_ markdown: OrderedList) {

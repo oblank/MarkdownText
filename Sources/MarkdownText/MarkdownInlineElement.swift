@@ -6,6 +6,7 @@ public struct MarkdownInlineElement {
     public var content: String
     /// The attributes to apply to this content
     public var attributes: InlineAttributes = []
+    public var exts: [String: Any]? = [:]
 }
 
 /// Represents the supported attributes for an inline element
