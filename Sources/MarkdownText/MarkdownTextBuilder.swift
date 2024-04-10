@@ -151,12 +151,20 @@ struct MarkdownTextBuilder: MarkupWalker {
                 )
             default:
                 if let checkbox = listItem.checkbox {
+                    // 将已经完成的置为删除效果
+                    if checkbox == .checked {
+                        inlineElements = inlineElements.map { tmp in
+                            var element = tmp
+                            element.attributes.insert(.strikethrough)
+                            return element
+                        }
+                    }
+                    
                     lists[index].append(checklist: .init(
                         level: lists.count - 1,
                         bullet: .init(isChecked: checkbox == .checked),
                         content: .init(content: .init(elements: inlineElements))
-                    )
-                    )
+                    ))
                 } else {
                     lists[index].append(unordered: .init(
                         level: lists.count - 1,
