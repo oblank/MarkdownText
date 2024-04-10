@@ -28,8 +28,18 @@ public struct CheckListBulletMarkdownConfiguration {
         public let isChecked: Bool
 
         var body: some View {
-            Image(systemName: isChecked ? "checkmark.circle.fill" : "circle")
+            Group {
+                if isChecked {
+                    Text("\u{02611}")
+                        .foregroundColor(.secondary)
+                        .opacity(0.5)
+                } else {
+                    Image(systemName: isChecked ? "checkmark.square" : "square")
+                        .font(.system(size: 25))
+                }
+            }
                 .frame(minWidth: reservedWidth)
+                .foregroundColor(isChecked ? .secondary : .primary)
         }
     }
 
