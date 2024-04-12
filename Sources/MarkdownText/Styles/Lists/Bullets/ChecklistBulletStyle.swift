@@ -35,7 +35,7 @@ public struct CheckListBulletMarkdownConfiguration {
                         .opacity(0.5)
                 } else {
                     Text("◻️")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                         .opacity(0.5)
 //                    Image(systemName: isChecked ? "checkmark.square" : "square")
                 }
