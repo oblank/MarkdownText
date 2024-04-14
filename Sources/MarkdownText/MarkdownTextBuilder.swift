@@ -77,7 +77,8 @@ struct MarkdownTextBuilder: MarkupWalker {
 
         // ------------------增加记账格式 text start--------------------------
         if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            // 这会导致行前面有空格
+            // 解决一个换行符没有换行的问题
+            inlineElements.append(.init(content: .init("\n"), attributes: attributes, exts: exts))
             return
         }
         if isMoneyMarkdown(text) {

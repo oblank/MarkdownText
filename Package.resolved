@@ -12,7 +12,7 @@
     {
       "identity" : "swift-markdown",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/shaps80/swift-markdown",
+      "location" : "https://github.com/apple/swift-markdown",
       "state" : {
         "revision" : "83188dee2dbccfa70124c56055dd0b759d3e4ec3",
         "version" : "0.3.0"
