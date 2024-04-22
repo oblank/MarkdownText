@@ -29,6 +29,7 @@ public struct ParagraphMarkdownConfiguration {
     ///     content.label // maintains the default style
     ///         .lineSpacing(20)
     public let content: InlineMarkdownConfiguration
+    public let id: UUID = UUID()
 
     private struct Label: View {
         let content: InlineMarkdownConfiguration
