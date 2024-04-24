@@ -41,6 +41,44 @@ public struct InlineMarkdownConfiguration {
         Label(elements: elements)
             .fixedSize(horizontal: false, vertical: true)
     }
+    
+    // TODO 返原回原始内容，但不精准
+    public var content: String {
+        var result = ""
+        for component in elements {
+            result += component.content
+        }
+        return result
+    }
+    
+    // TODO 返原回原始内容，但不精准
+    public var contentOrigin: String {
+        var result = ""
+        for component in elements {
+            let attributes = component.attributes
+            var tmp = component.content
+            if attributes.contains(.code) {
+                tmp = "`\(tmp)`"
+            }
+            if attributes.contains(.bold) {
+                tmp = "**\(tmp)**"
+            }
+
+            if attributes.contains(.italic) {
+                tmp = "*\(tmp)*"
+            }
+
+            if attributes.contains(.strikethrough) {
+                tmp = "~~\(tmp)~~"
+            }
+
+            if attributes.contains(.link) {
+                tmp = "[](\(tmp)"
+            }
+            result += tmp
+        }
+        return result
+    }
 }
 
 struct InlineMarkdownStyle {
