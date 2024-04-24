@@ -171,8 +171,7 @@ struct MarkdownTextBuilder: MarkupWalker {
                         level: lists.count - 1,
                         bullet: .init(level: lists.count - 1),
                         content: .init(content: .init(elements: inlineElements))
-                    )
-                    )
+                    ))
                 }
             }
         } else {
