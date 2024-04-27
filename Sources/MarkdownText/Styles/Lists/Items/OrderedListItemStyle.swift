@@ -17,7 +17,9 @@ public struct AnyOrderedListItemMarkdownStyle: OrderedListItemMarkdownStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        label(configuration)
+        var config = configuration
+        config.content.attributes.insert(.orderedList)
+        return label(config)
     }
 }
 
@@ -59,7 +61,7 @@ public struct OrderedListItemMarkdownConfiguration {
     /// The bullet configuration for this element
     public let bullet: OrderedListBulletMarkdownConfiguration
     /// The content configuration for this element
-    public let content: ParagraphMarkdownConfiguration
+    public var content: ParagraphMarkdownConfiguration
     /// Returns a default ordered item markdown representation
     public var label: some View {
         Item(level: level, bullet: bullet, paragraph: content)

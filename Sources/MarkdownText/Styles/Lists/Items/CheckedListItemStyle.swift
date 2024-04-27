@@ -17,7 +17,9 @@ public struct AnyCheckListItemMarkdownStyle: CheckListItemMarkdownStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        label(configuration)
+        var config = configuration
+        config.content.attributes.insert(.checkList)
+        return label(config)
     }
 }
 
@@ -59,7 +61,7 @@ public struct CheckListItemMarkdownConfiguration {
     /// The bullet configuration for this element
     public let bullet: CheckListBulletMarkdownConfiguration
     /// The content configuration for this element
-    public let content: ParagraphMarkdownConfiguration
+    public var content: ParagraphMarkdownConfiguration
     /// Returns a default checklist item markdown representation
     public var label: some View {
         Item(level: level, bullet: bullet, paragraph: content)

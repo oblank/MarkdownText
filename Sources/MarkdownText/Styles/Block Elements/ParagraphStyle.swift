@@ -20,6 +20,35 @@ public struct AnyParagraphMarkdownStyle: ParagraphMarkdownStyle {
     }
 }
 
+public struct ParagraphAttributes: OptionSet, CustomStringConvertible {
+    public let rawValue: Int
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    /// heading
+    public static let heading = ParagraphAttributes(rawValue: 1 << 0)
+    /// orderedList
+    public static let orderedList = ParagraphAttributes(rawValue: 1 << 1)
+    /// unorderedList
+    public static let unorderedList = ParagraphAttributes(rawValue: 1 << 2)
+    /// checkList
+    public static let checkList = ParagraphAttributes(rawValue: 1 << 3)
+    /// image
+    public static let image = ParagraphAttributes(rawValue: 1 << 4)
+    /// code
+    public static let code = ParagraphAttributes(rawValue: 1 << 5)
+    /// thematicBreak
+    public static let thematicBreak = ParagraphAttributes(rawValue: 1 << 6)
+    public static let paragraph = ParagraphAttributes(rawValue: 1 << 7)
+
+    public var description: String {
+        let elements: [String] = []
+        // TODO
+        return elements.joined(separator: ", ")
+    }
+}
+
 /// The properties of a paragraph markdown element
 public struct ParagraphMarkdownConfiguration {
     /// The content for this element
@@ -30,6 +59,7 @@ public struct ParagraphMarkdownConfiguration {
     ///         .lineSpacing(20)
     public let content: InlineMarkdownConfiguration
     public let id: UUID = UUID()
+    public var attributes: ParagraphAttributes = []
 
     private struct Label: View {
         let content: InlineMarkdownConfiguration
