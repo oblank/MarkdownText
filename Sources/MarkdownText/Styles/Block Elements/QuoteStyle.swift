@@ -33,7 +33,7 @@ public struct QuoteMarkdownConfiguration {
     ///                 .opacity(0.05)
     ///                 .cornerRadius(13)
     ///         }
-    public let content: ParagraphMarkdownConfiguration
+    public var content: ParagraphMarkdownConfiguration
 
     private struct Label: View {
         let paragraph: ParagraphMarkdownConfiguration

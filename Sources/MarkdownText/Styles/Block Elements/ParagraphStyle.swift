@@ -40,6 +40,7 @@ public struct ParagraphAttributes: OptionSet, CustomStringConvertible {
     public static let code = ParagraphAttributes(rawValue: 1 << 5)
     /// thematicBreak
     public static let thematicBreak = ParagraphAttributes(rawValue: 1 << 6)
+    public static let quote = ParagraphAttributes(rawValue: 1 << 7)
     public static let paragraph = ParagraphAttributes(rawValue: 1 << 7)
 
     public var description: String {
@@ -52,6 +53,7 @@ public struct ParagraphAttributes: OptionSet, CustomStringConvertible {
         if contains(.image) { elements.append("image") }
         if contains(.thematicBreak) { elements.append("thematicBreak") }
         if contains(.paragraph) { elements.append("paragraph") }
+        if contains(.quote) { elements.append("quote") }
         return elements.joined(separator: ", ")
     }
 }
