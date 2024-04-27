@@ -51,7 +51,7 @@ public struct InlineMarkdownConfiguration {
         return result
     }
     
-    // TODO 返原回原始内容，但不精准
+    // TODO 返原回原始内容，但不精准，md样式的先后顺序不对
     public var contentOrigin: String {
         var result = ""
         for component in elements {
@@ -63,19 +63,60 @@ public struct InlineMarkdownConfiguration {
             if attributes.contains(.bold) {
                 tmp = "**\(tmp)**"
             }
-
-            if attributes.contains(.italic) {
-                tmp = "*\(tmp)*"
-            }
-
             if attributes.contains(.strikethrough) {
                 tmp = "~~\(tmp)~~"
             }
-
+            if attributes.contains(.italic) {
+                tmp = "*\(tmp)*"
+            }
             if attributes.contains(.link) {
                 tmp = "[](\(tmp)"
             }
             result += tmp
+        }
+        return result
+    }
+    
+    public var contentOriginRegex: String {
+        var result = ""
+        for component in elements {
+            let attributes = component.attributes
+            var tmp = component.content
+            var styles: [String] = []
+            if attributes.contains(.code) {
+                let symbol = "\\`"
+                if !styles.contains(symbol) {
+                    styles.append(symbol)
+                }
+            }
+            if attributes.contains(.bold) {
+                let symbol = "\\*\\*"
+                if !styles.contains(symbol) {
+                    styles.append(symbol)
+                }
+            }
+            if attributes.contains(.strikethrough) {
+                let symbol = "\\~\\~"
+                if !styles.contains(symbol) {
+                    styles.append(symbol)
+                }
+            }
+            if attributes.contains(.italic) {
+                let symbol = "\\*"
+                if !styles.contains(symbol) {
+                    styles.append(symbol)
+                }
+            }
+            if attributes.contains(.link) {
+                tmp = "\\(\(tmp)\\)"
+            }
+            
+            tmp = tmp.replacingOccurrences(of: "\n", with: "(.*)?")
+            if styles.isEmpty {
+                result += tmp
+            } else {
+                result += "([\(styles.joined())]+)\(tmp)([\(styles.joined())]+)"
+            }
         }
         return result
     }

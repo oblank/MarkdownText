@@ -43,8 +43,15 @@ public struct ParagraphAttributes: OptionSet, CustomStringConvertible {
     public static let paragraph = ParagraphAttributes(rawValue: 1 << 7)
 
     public var description: String {
-        let elements: [String] = []
-        // TODO
+        var elements: [String] = []
+        if contains(.heading) { elements.append("heading") }
+        if contains(.orderedList) { elements.append("orderedList") }
+        if contains(.unorderedList) { elements.append("unorderedList") }
+        if contains(.checkList) { elements.append("checkList") }
+        if contains(.code) { elements.append("code") }
+        if contains(.image) { elements.append("image") }
+        if contains(.thematicBreak) { elements.append("thematicBreak") }
+        if contains(.paragraph) { elements.append("paragraph") }
         return elements.joined(separator: ", ")
     }
 }
