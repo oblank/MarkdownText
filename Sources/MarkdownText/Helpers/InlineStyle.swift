@@ -82,6 +82,18 @@ public struct InlineMarkdownConfiguration {
         for component in elements {
             let attributes = component.attributes
             var tmp = component.content
+                .replacingOccurrences(of: ".", with: "\\.")
+                .replacingOccurrences(of: "-", with: "\\-")
+                .replacingOccurrences(of: "$", with: "\\$")
+                .replacingOccurrences(of: "*", with: "\\*")
+                .replacingOccurrences(of: "^", with: "\\^")
+                .replacingOccurrences(of: "!", with: "\\!")
+                .replacingOccurrences(of: "~", with: "\\~")
+                .replacingOccurrences(of: "[", with: "\\[")
+                .replacingOccurrences(of: "]", with: "\\]")
+                .replacingOccurrences(of: "(", with: "\\(")
+                .replacingOccurrences(of: ")", with: "\\)")
+                .replacingOccurrences(of: " ", with: "\\s")
             var styles: [String] = []
             if attributes.contains(.code) {
                 let symbol = "\\`"
