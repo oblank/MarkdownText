@@ -37,7 +37,7 @@ public struct MarkdownText: View, MarkupWalker {
     ///   - paragraphSpacing: The spacing to apply between all block elements
     public init(_ markdown: String, source: URL? = nil, paragraphSpacing: CGFloat? = 20, indent: Int = 0) {
         let elements = MarkdownTextBuilder(
-            document: Document(parsing: markdown, source: source, options: [.parseBlockDirectives, .parseSymbolLinks]),
+            document: Document(parsing: markdown, source: source),
             indent: indent
         ).blockElements
 
